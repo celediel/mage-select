@@ -8,10 +8,8 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/manifoldco/promptui/list"
-
+	"github.com/charmbracelet/huh"
 	"github.com/magefile/mage/mage"
-	"github.com/manifoldco/promptui"
 )
 
 const (
@@ -24,15 +22,6 @@ var (
 	hash        = "<unknown>"
 	tag         = "<unknown>"
 )
-
-func searcher(targets []string) list.Searcher {
-	return func(input string, index int) bool {
-		if strings.Contains(strings.ToLower(targets[index]), input) {
-			return true
-		}
-		return false
-	}
-}
 
 func main() {
 	if len(os.Args) > 1 {
@@ -69,30 +58,24 @@ func main() {
 		targets = append(targets, line)
 	}
 
-	templates := &promptui.SelectTemplates{
-		Label:    "{{.}}",
-		Active:   promptui.IconSelect + " {{.}}",
-		Inactive: "  {{.|faint}}",
-		Selected: promptui.IconGood + " {{.}}",
+	var options []huh.Option[string]
+	for _, target := range targets {
+		options = append(options, huh.NewOption(strings.ToUpper(target), target))
 	}
 
-	size := maxSize
-	if len(targets) < size {
-		size = len(targets)
-	}
+	var result string
+	form := huh.NewForm(
+		huh.NewGroup(
+			huh.NewSelect[string]().
+				Title("Select a mage target").
+				Options(options...).
+				Value(&result),
+		),
+	)
 
-	prompt := promptui.Select{
-		Label:             "Select a mage target:",
-		Items:             targets,
-		Templates:         templates,
-		HideHelp:          true,
-		Size:              size,
-		Searcher:          searcher(targets),
-		StartInSearchMode: true,
-	}
-
-	_, result, err := prompt.Run()
+	err = form.Run()
 	if err != nil {
+		fmt.Println(err)
 		return
 	}
 

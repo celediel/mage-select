@@ -4,7 +4,7 @@
 mage-select
 ===
 
-CLI frontend for [mage](https://magefile.org) based on [promptui](https://github.com/manifoldco/promptui).
+CLI frontend for [mage](https://magefile.org) based on [huh](https://github.com/charmbracelet/huh).
 
 ![](.github/images/screenshot.png)	
 
@@ -64,6 +64,6 @@ If you'd like to contribute, please fork this repository and create a feature br
 # Links
 
 - [Magefile project](https://magefile.org)
-- [promptui](https://github.com/manifoldco/promptui)
+- [huh](https://github.com/charmbracelet/huh)
 - [README inspiration](https://github.com/jehna/readme-best-practices)
 - [ssh-select](https://github.com/iwittkau/ssh-select): `ssh` CLI frontend.
